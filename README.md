@@ -34,8 +34,16 @@ To build for ROMs using borrowed keymaster 4.0, run "export FOX_USE_KEYMASTER_4=
 
 ```sh
 . build/envsetup.sh
-lunch ofrp_evert-eng
-make -j$(nproc --all) bootimage
+export ALLOW_MISSING_DEPENDENCIES=true
+export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
+export LC_ALL="C"
+export OF_VANILLA_BUILD=1
+export OF_AB_DEVICE=1
+export OF_USE_MAGISKBOOT_FOR_ALL_PATCHES=1
+export USE_CCACHE=1
+export CCACHE_EXEC=/usr/bin/ccache
+ccache -M 50G
+lunch twrp_evert-eng && mka adbd bootimage
 ```
 ### Copyright
  ```
