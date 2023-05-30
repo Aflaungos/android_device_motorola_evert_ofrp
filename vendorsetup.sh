@@ -35,15 +35,16 @@ fi
 
 if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE" ]; then
   export TW_DEFAULT_LANGUAGE="en"
-	export OF_KEEP_FORCED_ENCRYPTION=1
-	export OF_PATCH_AVB20=1
+	export OF_KEEP_FORCED_ENCRYPTION=0
   export OF_SCREEN_H=2160
   export OF_CLOCK_POS=1
 	export OF_USE_MAGISKBOOT=1
 	export OF_USE_MAGISKBOOT_FOR_ALL_PATCHES=1
-	export OF_DONT_PATCH_ENCRYPTED_DEVICE=1
-	export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
+	export OF_DONT_PATCH_ENCRYPTED_DEVICE=0
+	export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=0
+	export OF_FORCE_PREBUILT_KERNEL=1
 	export OF_NO_TREBLE_COMPATIBILITY_CHECK=1
+	export OF_DISABLE_MIUI_SPECIFIC_FEATURES=1
   export LC_ALL="C"
   export OF_VANILLA_BUILD=1
   export OF_AB_DEVICE=1
@@ -59,9 +60,7 @@ if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE" ]; then
 	export FOX_USE_SED_BINARY=1
 	export FOX_USE_XZ_UTILS=1
 	export FOX_REPLACE_BUSYBOX_PS=1
-	export OF_USE_NEW_MAGISKBOOT=1
 	export OF_SKIP_MULTIUSER_FOLDERS_BACKUP=1
-  export FOX_BUGGED_AOSP_ARB_WORKAROUND="1510672800"; # Tue Nov 14 15:20:00 GMT 2017
 
         # use system (ROM) fingerprint where available
         export OF_USE_SYSTEM_FINGERPRINT=1
@@ -69,13 +68,6 @@ if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE" ]; then
 	# OTA for custom ROMs
         # export OF_SUPPORT_ALL_BLOCK_OTA_UPDATES=1
         export OF_FIX_OTA_UPDATE_MANUAL_FLASH_ERROR=1
-
-        # -- add settings for R11 --
-        export FOX_R11=1
-        export OF_DISABLE_MIUI_OTA_BY_DEFAULT=1
-        export OF_QUICK_BACKUP_LIST="/boot;/data;/system_image;/vendor_image;"
-#        export FOX_ADVANCED_SECURITY=1
-        # -- end R11 settings --
 
 	# run a process after formatting data to work-around MTP issues (only if forced-encryption is being disabled)
 	export OF_RUN_POST_FORMAT_PROCESS=1
