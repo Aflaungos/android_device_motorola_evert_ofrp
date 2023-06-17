@@ -17,7 +17,8 @@
 DEVICE_PATH := device/motorola/evert
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 # Inherit some common TWRP stuff
 $(call inherit-product, vendor/twrp/config/common.mk)
@@ -47,6 +48,14 @@ PRODUCT_RELEASE_NAME := $(lastword $(subst /, ,$(lastword $(subst _, ,$(firstwor
 # A/B updater
 AB_OTA_UPDATER := true
 
+# Fastbootd
+PRODUCT_PACKAGES += \
+    fastbootd
+
+# Dynamic partitions
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+PRODUCT_RETROFIT_DYNAMIC_PARTITIONS := true
+
 AB_OTA_PARTITIONS += \
     boot \
     system \
@@ -58,6 +67,10 @@ AB_OTA_POSTINSTALL_CONFIG += \
     FILESYSTEM_TYPE_system=ext4 \
     POSTINSTALL_OPTIONAL_system=true
 
+# Check Dynamic partitions
+PRODUCT_PACKAGES += \
+    check_dynamic_partitions
+
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_product=true \
     POSTINSTALL_PATH_product=bin/check_dynamic_partitions \
@@ -66,7 +79,6 @@ AB_OTA_POSTINSTALL_CONFIG += \
 
 PRODUCT_PACKAGES += \
     otapreopt_script \
-    cppreopts.sh \
     update_engine \
     update_engine_sideload \
     update_verifier
@@ -78,19 +90,9 @@ PRODUCT_PACKAGES_DEBUG += \
 
 # Boot control HAL
 PRODUCT_PACKAGES += \
+    android.hardware.boot@1.0-impl.recovery \
     bootctrl.sdm660 \
-    libgptutils \
-    libz \
-    libcutils
-
-PRODUCT_PACKAGES += \
-    charger_res_images \
-    charger
-
-# FBE crypto volume modes
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.crypto.volume.filenames_mode=aes-256-cts \
-    ro.crypto.volume.contents_mode=ice
+    bootctrl.sdm660.recovery
 
 # Properties for decryption
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -104,13 +106,13 @@ PRODUCT_PACKAGES += \
     qcom_decrypt \
     qcom_decrypt_fbe
 
+# Recovery
+TARGET_RECOVERY_FSTAB := device/motorola/evert/recovery.fstab
+
+# Soong namespaces
+PRODUCT_SOONG_NAMESPACES += \
+    $(LOCAL_PATH)
+
 # Screen
 TARGET_SCREEN_WIDTH := 1080
 TARGET_SCREEN_HEIGHT := 2160
-
-# Dependencies
-TARGET_RECOVERY_DEVICE_MODULES += \
-    libion
-
-RECOVERY_LIBRARY_SOURCE_FILES += \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libion.so
