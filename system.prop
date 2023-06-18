@@ -1,5 +1,7 @@
 # Name
 ro.display.series=Moto G6 Plus
+ro.product.board=sdm660
+ro.board.platform=sdm660
 
 # Fastbootd
 ro.fastbootd.available=true
