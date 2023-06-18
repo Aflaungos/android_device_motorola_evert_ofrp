@@ -28,18 +28,16 @@
 import /init.recovery.qcom_decrypt.rc
 
 on fs
-    wait /dev/block/platform/soc/c0c4000.sdhci
-    symlink /dev/block/platform/soc/c0c4000.sdhci /dev/block/bootdevice
-
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    
     chmod 0660 /dev/qseecom
     chown system drmrpc /dev/qseecom
     chmod 0664 /dev/ion
     chown system system /dev/ion
     export LD_LIBRARY_PATH /sbin:/vendor/lib64:/vendor/lib64/hw
     install_keyring
-
-on post-fs
-    start boot-1-0
+    start boot-hal-1-0
     
 on init
     setprop sys.usb.configfs 1
@@ -47,8 +45,6 @@ on init
     setprop prepdecrypt.setpatch true
     setprop prepdecrypt.loglevel 2
 
-service boot-1-0 /system/bin/android.hardware.boot@1.0-service
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
+on boot
+    setprop sys.usb.config adb
+    start health-hal-2-1
